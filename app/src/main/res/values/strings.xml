@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Live Attendance App</string>
     <string name="app_name_short">Live Attendance</string>
+    <string name="login_text">Hello, Login Your \nAccount</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
