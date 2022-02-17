@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Live Attendance App</string>
+    <string name="app_name_short">Live Attendance</string>
 </resources>
