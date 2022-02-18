@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkIsLogin() {
         val isLogin = HawkStorage.instance(this).isLogin()
-        if (isLogin) {
+        if (isLogin!!) {
             startActivity<MainActivity>()
             finishAffinity()
         } else {
