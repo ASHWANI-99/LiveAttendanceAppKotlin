@@ -19,4 +19,7 @@
     <string name="change_password">Change Password</string>
     <string name="log_out">Log Out</string>
     <string name="change_language">Change Language</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
