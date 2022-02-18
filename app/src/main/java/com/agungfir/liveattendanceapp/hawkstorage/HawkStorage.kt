@@ -36,7 +36,10 @@ class HawkStorage {
     }
 
     fun isLogin(): Boolean {
-        return Hawk.get(USER_KEY)
+        if (Hawk.contains(USER_KEY)) {
+            return true
+        }
+        return false
     }
 
     fun deleteAll() {

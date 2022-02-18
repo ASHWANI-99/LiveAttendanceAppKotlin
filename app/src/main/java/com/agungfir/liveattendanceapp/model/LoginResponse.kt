@@ -23,7 +23,7 @@ data class Meta(
 data class User(
 
     @field:SerializedName("is_admin")
-    val isAdmin: Boolean? = null,
+    val isAdmin: Int? = null,
 
     @field:SerializedName("updated_at")
     val updatedAt: String? = null,
