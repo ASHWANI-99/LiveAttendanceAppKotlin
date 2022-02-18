@@ -7,9 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_ripple">#41FFFFFF</color>
     <color name="red">#E64848</color>
     <color name="green">#33A437</color>
     <color name="yellow">#F7C927</color>
     <color name="text_primary">#333333</color>
+    <color name="text_secondary">#666666</color>
     <color name="divider">#EFEFEF</color>
+    <color name="handler_bottom_sheet">#C5C5C5</color>
 </resources>
