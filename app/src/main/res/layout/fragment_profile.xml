@@ -66,6 +66,14 @@
                     android:src="@color/divider" />
 
                 <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_email_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

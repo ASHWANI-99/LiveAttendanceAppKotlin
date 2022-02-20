@@ -1,9 +1,6 @@
 package com.agungfir.liveattendanceapp.networking
 
-import com.agungfir.liveattendanceapp.model.AttendanceResponse
-import com.agungfir.liveattendanceapp.model.ForgotPasswordResponse
-import com.agungfir.liveattendanceapp.model.HistoryResponse
-import com.agungfir.liveattendanceapp.model.LoginResponse
+import com.agungfir.liveattendanceapp.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -34,5 +31,9 @@ interface LiveAttendaceApiService {
         @Header("Authorization") token: String,
         @Query("from") fromDate: String,
         @Query("to") toDate: String
-    ):Call<HistoryResponse>
+    ): Call<HistoryResponse>
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("auth/logout")
+    fun logoutRequest(@Header("Authorization") token: String): Call<LogoutResponse>
 }
