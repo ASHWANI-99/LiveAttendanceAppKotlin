@@ -3,6 +3,7 @@ package com.agungfir.liveattendanceapp.views.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.IntentSender
@@ -21,13 +22,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.agungfir.liveattendanceapp.BuildConfig
 import com.agungfir.liveattendanceapp.R
 import com.agungfir.liveattendanceapp.databinding.BottomSheetHomeBinding
 import com.agungfir.liveattendanceapp.databinding.FragmentHomeBinding
+import com.agungfir.liveattendanceapp.date.MyDate
 import com.agungfir.liveattendanceapp.dialog.MyDialog
+import com.agungfir.liveattendanceapp.hawkstorage.HawkStorage
+import com.agungfir.liveattendanceapp.model.AttendanceResponse
+import com.agungfir.liveattendanceapp.model.HistoryResponse
+import com.agungfir.liveattendanceapp.networking.ApiService
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -37,8 +44,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.jetbrains.anko.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -56,6 +72,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private var currentPhotoPath = ""
+    private var isCheckIn = false
     private val mapPermissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -77,6 +94,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private var currentLocation: Location? = null
     private var locationCallback: LocationCallback? = null
+    private var task: Task<LocationSettingsResponse>? = null
 
     // UI
     private var binding: FragmentHomeBinding? = null
@@ -100,6 +118,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         onClick()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkIfAlreadyPresent()
+    }
+
     private fun onClick() {
         binding?.fabCurrentLocation?.setOnClickListener {
             goToCurrentLocation()
@@ -112,6 +135,178 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 setRequestCamera()
             }
         }
+
+        bindingBottomSheet?.btnCheckIn?.setOnClickListener {
+            val token = HawkStorage.instance(requireContext()).getToken()
+            if (checkValidation()) {
+                if (isCheckIn()) {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.are_you_sure))
+                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                            sendDataAttendance(token, "out")
+                        }
+                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                } else {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.are_you_sure))
+                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                            sendDataAttendance(token, "in")
+                        }
+                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun sendDataAttendance(token: String, type: String) {
+        val params = HashMap<String, RequestBody>()
+        MyDialog.showProgressDialog(requireContext())
+        if (currentLocation != null && currentPhotoPath.isNotEmpty()) {
+            val latitude = currentLocation?.latitude.toString()
+            val longitude = currentLocation?.longitude.toString()
+            val address = bindingBottomSheet?.tvCurrentLcoation?.text.toString()
+
+            val file = File(currentPhotoPath)
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                BuildConfig.APPLICATION_ID + ".fileprovider",
+                file
+            )
+            val typeFile = context?.contentResolver?.getType(uri)
+
+            val mediaTypeText = MultipartBody.FORM
+            val mediaTypeFile = typeFile?.toMediaType()
+
+            val requestLatitude = latitude.toRequestBody(mediaTypeText)
+            val requestLongitude = longitude.toRequestBody(mediaTypeText)
+            val requestAddress = address.toRequestBody(mediaTypeText)
+            val requestType = type.toRequestBody(mediaTypeText)
+
+            params["lat"] = requestLatitude
+            params["long"] = requestLongitude
+            params["address"] = requestAddress
+            params["type"] = requestType
+
+            val requestPhotoFile = file.asRequestBody(mediaTypeFile)
+            val multipartBody =
+                MultipartBody.Part.createFormData("photo", file.name, requestPhotoFile)
+            ApiService.getLiveAttendanceServices()
+                .attend("Bearer ${token}", params, multipartBody)
+                .enqueue(object : Callback<AttendanceResponse> {
+                    override fun onResponse(
+                        call: Call<AttendanceResponse>,
+                        response: Response<AttendanceResponse>
+                    ) {
+                        MyDialog.hideDialog()
+                        if (response.isSuccessful) {
+                            val attendanceResponse = response.body()
+                            bindingBottomSheet?.ivCapturePhoto?.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.ic_photo_camera
+                                )
+                            )
+                            bindingBottomSheet?.ivCapturePhoto?.adjustViewBounds = false
+
+                            if (type == "in") {
+                                MyDialog.dynamicDialog(
+                                    requireContext(),
+                                    getString(R.string.success_check_in),
+                                    attendanceResponse?.message.toString()
+                                )
+                            } else {
+                                MyDialog.dynamicDialog(
+                                    requireContext(),
+                                    getString(R.string.success_check_out),
+                                    attendanceResponse?.message.toString()
+                                )
+                            }
+                            checkIfAlreadyPresent()
+                        } else {
+                            MyDialog.dynamicDialog(
+                                requireContext(),
+                                getString(R.string.alert),
+                                getString(R.string.something_went_wrong)
+                            )
+                        }
+                    }
+
+                    override fun onFailure(call: Call<AttendanceResponse>, t: Throwable) {
+                        MyDialog.hideDialog()
+                        Log.e(TAG, "Error : ${t.message}")
+                    }
+                })
+        }
+
+    }
+
+    private fun checkIfAlreadyPresent() {
+        val token = HawkStorage.instance(requireContext()).getToken()
+        val currentDate = MyDate.getCurrentDateForServer()
+
+        ApiService.getLiveAttendanceServices()
+            .getHistoryAttendance("Bearer $token", currentDate, currentDate)
+            .enqueue(object : Callback<HistoryResponse> {
+                override fun onResponse(
+                    call: Call<HistoryResponse>,
+                    response: Response<HistoryResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val histories = response.body()?.histories
+                        if (histories != null && histories.isNotEmpty()) {
+                            if (histories[0]?.status == 1) {
+
+                                isCheckIn = false
+                                checkIsCheckIn()
+                                bindingBottomSheet?.btnCheckIn?.isEnabled = false
+                                bindingBottomSheet?.btnCheckIn?.text =
+                                    getString(R.string.you_already_present)
+                            } else {
+                                isCheckIn = true
+                                checkIsCheckIn()
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<HistoryResponse>, t: Throwable) {
+                    Log.e(TAG, "Error: ${t.message}")
+                }
+            })
+    }
+
+    private fun checkIsCheckIn() {
+        if (isCheckIn) {
+            bindingBottomSheet?.btnCheckIn?.backgroundTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.red)
+            bindingBottomSheet?.btnCheckIn?.text = getString(R.string.check_out)
+        } else {
+            bindingBottomSheet?.btnCheckIn?.backgroundTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.primary_color)
+            bindingBottomSheet?.btnCheckIn?.text = getString(R.string.check_in)
+        }
+    }
+
+    private fun isCheckIn(): Boolean {
+        return isCheckIn
+    }
+
+    private fun checkValidation(): Boolean {
+        if (currentPhotoPath.isEmpty()) {
+            MyDialog.dynamicDialog(
+                requireContext(),
+                getString(R.string.alert),
+                getString(R.string.please_take_your_photo)
+            )
+            return false
+        }
+        return true
     }
 
     override fun onDestroyView() {
@@ -352,10 +547,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val result: String
         context?.let {
             val geocode = Geocoder(it, Locale.getDefault())
-            val address = geocode.getFromLocation(latitude, longitude, 1)
+            val addresses = geocode.getFromLocation(latitude, longitude, 1)
 
-            if (address.size > 0) {
-                result = address[0].getAddressLine(0)
+            if (addresses.size > 0) {
+                result = addresses[0].getAddressLine(0)
                 return result
             }
         }
