@@ -265,6 +265,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                                 isCheckIn = false
                                 checkIsCheckIn()
                                 bindingBottomSheet?.btnCheckIn?.isEnabled = false
+                                bindingBottomSheet?.btnCheckIn?.backgroundTintList =
+                                    ContextCompat.getColorStateList(
+                                        requireContext(),
+                                        android.R.color.darker_gray
+                                    )
                                 bindingBottomSheet?.btnCheckIn?.text =
                                     getString(R.string.you_already_present)
                             } else {
