@@ -3,9 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/bg_btn_primary.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/bg_checkout.xml" value="0.198" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/bg_edit_text.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/btn_checkout.xml" value="0.198" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/ic_arrow_left.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/ic_arrow_right.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/ic_check_primary.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/ic_check_yellow.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/ic_circle.xml" value="0.291" />
         <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/drawable/img_logo.xml" value="0.291" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_change_password.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_change_passworrd.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_forgot_password.xml" value="0.33" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_login.xml" value="0.3703125" />
         <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_main.xml" value="0.3703125" />
         <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/activity_splash.xml" value="0.3703125" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/bg_round_top.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/bottom_sheet_home.xml" value="0.33" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/fragment_history.xml" value="0.33" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/fragment_home.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/layout_progress.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/layout/layout_today_check_in_out.xml" value="0.3703125" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/menu/main_menu.xml" value="0.3703125" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/xml/file_paths.xml" value="0.3703125" />
+        <entry key="..\:/Users/agung/Desktop/Android/LiveAttendanceApp/app/src/main/res/xml/network_security_config.xml" value="0.19010416666666666" />
       </map>
     </option>
   </component>

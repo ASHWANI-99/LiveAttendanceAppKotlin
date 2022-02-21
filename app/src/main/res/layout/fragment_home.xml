@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.home.HomeFragment">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_attendance"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity" />
+
+    <include
+        layout="@layout/layout_current_time_dialog"
+        android:layout_width="224dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_current_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/current_location"
+        android:src="@drawable/ic_my_location"
+        android:translationY="-42dp"
+        app:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/layout_bottom_sheet"
+        app:layout_anchorGravity="right"
+        app:tint="@color/primary_color" />
+
+    <include
+        android:id="@+id/layout_bottom_sheet"
+        layout="@layout/bottom_sheet_home" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
