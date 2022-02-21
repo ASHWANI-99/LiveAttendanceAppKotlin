@@ -34,9 +34,12 @@
     <string name="are_you_sure">Apa kamu yakin?</string>
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
-    <string name="success_check_in">Success Check In</string>
-    <string name="success_check_out">Success Check Out</string>
+    <string name="success_check_in">Sukses Check In</string>
+    <string name="success_check_out">Sukses Check Out</string>
     <string name="something_went_wrong">Ada Sesuatu yang Salah</string>
     <string name="you_already_present">Kamu Sudah Absensi</string>
     <string name="are_you_sure_to_log_out">Apa kamu yakin ingin keluar?</string>
+    <string name="please_field_your_password">Silahkan password Anda</string>
+    <string name="your_password_did_not_match">Password Anda tidak cock</string>
+    <string name="your_password_has_been_update">Password Anda telah diubah</string>
 </resources>
