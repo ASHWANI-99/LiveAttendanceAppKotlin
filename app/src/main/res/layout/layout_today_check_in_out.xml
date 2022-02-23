@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/divider"
-    app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/gray"
+    app:cardCornerRadius="8dp"
     app:cardElevation="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -18,39 +18,46 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/container_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btn_primary"
-            android:gravity="center"
-            android:minHeight="80dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="20dp"
+            app:cardBackgroundColor="@color/primary_color"
+            app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_current_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_text"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="27" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minHeight="80dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="20dp">
 
-            <TextView
-                android:id="@+id/tv_current_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_text"
-                android:textColor="@color/white"
-                tools:text="September" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_current_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_text"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="27" />
+
+                <TextView
+                    android:id="@+id/tv_current_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_text"
+                    android:textColor="@color/white"
+                    tools:text="September" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"

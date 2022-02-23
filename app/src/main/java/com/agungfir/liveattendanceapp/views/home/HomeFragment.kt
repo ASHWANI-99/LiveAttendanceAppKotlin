@@ -97,7 +97,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var task: Task<LocationSettingsResponse>? = null
 
     // UI
-    private var binding: FragmentHomeBinding? = null
+    private lateinit var binding: FragmentHomeBinding
     private var bindingBottomSheet: BottomSheetHomeBinding? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -105,60 +105,63 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        bindingBottomSheet = binding?.layoutBottomSheet
-        return binding?.root
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater)
+        bindingBottomSheet = binding.layoutBottomSheet
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        setupMaps()
         onClick()
     }
 
     override fun onResume() {
         super.onResume()
+        setupMaps()
         checkIfAlreadyPresent()
     }
 
     private fun onClick() {
-        binding?.fabCurrentLocation?.setOnClickListener {
+
+        binding.fabCurrentLocation?.setOnClickListener {
             goToCurrentLocation()
         }
 
-        bindingBottomSheet?.ivCapturePhoto?.setOnClickListener {
-            if (checkPermissionCamera()) {
-                openCamera()
-            } else {
-                setRequestCamera()
-            }
-        }
-
-        bindingBottomSheet?.btnCheckIn?.setOnClickListener {
-            val token = HawkStorage.instance(requireContext()).getToken()
-            if (checkValidation()) {
-                if (isCheckIn()) {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle(getString(R.string.are_you_sure))
-                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                            sendDataAttendance(token, "out")
-                        }
-                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
+        bindingBottomSheet?.apply {
+            ivCapturePhoto.setOnClickListener {
+                if (checkPermissionCamera()) {
+                    openCamera()
                 } else {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle(getString(R.string.are_you_sure))
-                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                            sendDataAttendance(token, "in")
-                        }
-                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
+                    setRequestCamera()
+                }
+            }
+
+            btnCheckIn.setOnClickListener {
+                val token = HawkStorage.instance(requireContext()).getToken()
+                if (checkValidation()) {
+                    if (isCheckIn()) {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.are_you_sure))
+                            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                sendDataAttendance(token, "out")
+                            }
+                            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                    } else {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.are_you_sure))
+                            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                sendDataAttendance(token, "in")
+                            }
+                            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                    }
                 }
             }
         }
@@ -288,13 +291,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun checkIsCheckIn() {
         if (isCheckIn) {
-            bindingBottomSheet?.btnCheckIn?.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.red)
-            bindingBottomSheet?.btnCheckIn?.text = getString(R.string.check_out)
+            bindingBottomSheet?.apply {
+                btnCheckIn.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.red)
+                btnCheckIn.text = getString(R.string.check_out)
+            }
         } else {
-            bindingBottomSheet?.btnCheckIn?.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.primary_color)
-            bindingBottomSheet?.btnCheckIn?.text = getString(R.string.check_in)
+            bindingBottomSheet?.apply {
+                btnCheckIn.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.primary_color)
+                btnCheckIn.text = getString(R.string.check_in)
+            }
         }
     }
 
@@ -316,7 +323,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
         bindingBottomSheet = null
     }
 
@@ -332,8 +338,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         if (requestCode == REQUEST_CODE_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 val uri = Uri.parse(currentPhotoPath)
-                bindingBottomSheet?.ivCapturePhoto?.setImageURI(uri)
-                bindingBottomSheet?.ivCapturePhoto?.adjustViewBounds = true
+                bindingBottomSheet?.ivCapturePhoto?.apply {
+                    setImageURI(uri)
+                    adjustViewBounds = true
+                }
             } else {
                 if (currentPhotoPath.isNotEmpty()) {
                     val file = File(currentPhotoPath)

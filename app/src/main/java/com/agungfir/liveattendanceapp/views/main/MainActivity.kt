@@ -3,6 +3,7 @@ package com.agungfir.liveattendanceapp.views.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.agungfir.liveattendanceapp.R
 import com.agungfir.liveattendanceapp.databinding.ActivityMainBinding
 import com.agungfir.liveattendanceapp.views.history.HistoryFragment
@@ -12,6 +13,7 @@ import com.agungfir.liveattendanceapp.views.profile.ProfileFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var fragmentTransaction: FragmentTransaction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +51,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.frame_main, fragment)
-            .addToBackStack(null)
-            .commit()
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+
+        when (supportFragmentManager.findFragmentByTag(fragment.tag)) {
+            !is HomeFragment -> {
+                fragmentTransaction
+                    .replace(R.id.frame_main, fragment, HomeFragment::class.java.simpleName)
+                    .commit()
+            }
+            !is HistoryFragment -> {
+                fragmentTransaction
+                    .replace(R.id.frame_main, fragment, HistoryFragment::class.java.simpleName)
+                    .commit()
+            }
+            !is ProfileFragment -> {
+                fragmentTransaction
+                    .replace(R.id.frame_main, fragment, ProfileFragment::class.java.simpleName)
+                    .commit()
+            }
+        }
+
     }
 
     override fun onBackPressed() {

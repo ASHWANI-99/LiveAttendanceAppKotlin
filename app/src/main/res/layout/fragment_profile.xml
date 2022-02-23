@@ -24,6 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="0dp"
+            app:contentInsetEnd="24dp"
+            app:contentInsetStart="24dp"
             app:title="@string/profile"
             app:titleTextColor="@color/white" />
     </com.google.android.material.appbar.AppBarLayout>

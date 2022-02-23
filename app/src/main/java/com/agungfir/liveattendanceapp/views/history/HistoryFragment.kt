@@ -50,14 +50,17 @@ class HistoryFragment : Fragment() {
     }
 
     private fun init() {
-        // Request Data History
-        requestDataHistory()
-
         // Setup Calendar Swipe
         setupCalendar()
 
         // OnClick
         oncClick()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Request Data History
+        requestDataHistory()
     }
 
     private fun oncClick() {
@@ -72,7 +75,7 @@ class HistoryFragment : Fragment() {
                 for (dataHistory in dataHistories!!) {
                     val checkInTime: String
                     val checkOutTime: String
-                    val updateDate = dataHistory?.updatedAt
+                    val updateDate = dataHistory.updatedAt
                     val calendarUpdated = updateDate?.fromTimeStampToDate()?.toCalendar()
 
 
@@ -221,12 +224,6 @@ class HistoryFragment : Fragment() {
 
                 override fun onFailure(call: Call<HistoryResponse>, t: Throwable) {
                     binding?.pbHistory?.visibility = View.GONE
-                    MyDialog.dynamicDialog(
-                        requireContext(),
-                        getString(R.string.alert),
-                        "${t.message}"
-                    )
-
                     Log.e(TAG, "Error: ${t.message}")
                 }
             })
