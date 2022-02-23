@@ -33,17 +33,21 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
 
     private fun onClick() {
-        binding.tbForgotPassword.setOnClickListener {
-            finish()
-        }
+        binding.apply {
 
-        binding.btnForgotPassword.setOnClickListener {
-
-            val email = binding.etEmailForgotPassword.text.toString()
-
-            if (isFormValid(email)) {
-                forgotPassToServer(email)
+            tbForgotPassword.setOnClickListener {
+                finish()
             }
+
+            btnForgotPassword.setOnClickListener {
+
+                val email = binding.etEmailForgotPassword.text.toString()
+
+                if (isFormValid(email)) {
+                    forgotPassToServer(email)
+                }
+            }
+
         }
     }
 

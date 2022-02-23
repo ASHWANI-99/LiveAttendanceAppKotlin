@@ -1,5 +1,6 @@
 package com.agungfir.liveattendanceapp.views.splash
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.agungfir.liveattendanceapp.views.login.LoginActivity
 import com.agungfir.liveattendanceapp.views.main.MainActivity
 import org.jetbrains.anko.startActivity
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkIsLogin() {
         val isLogin = HawkStorage.instance(this).isLogin()
-        if (isLogin!!) {
+        if (isLogin) {
             startActivity<MainActivity>()
             finishAffinity()
         } else {

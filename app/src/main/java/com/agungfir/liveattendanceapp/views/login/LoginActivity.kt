@@ -39,18 +39,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onClick() {
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmailLogin.text.toString()
-            val password = binding.etPasswordLogin.text.toString()
+        binding.apply {
+            btnLogin.setOnClickListener {
+                val email = binding.etEmailLogin.text.toString()
+                val password = binding.etPasswordLogin.text.toString()
 
-            if (isFormValid(email, password)) {
-                loginToServer(email, password)
+                if (isFormValid(email, password)) {
+                    loginToServer(email, password)
+                }
+
+            }
+
+            btnForgotPassword.setOnClickListener {
+                startActivity<ForgotPasswordActivity>()
             }
         }
 
-        binding.btnForgotPassword.setOnClickListener {
-            startActivity<ForgotPasswordActivity>()
-        }
     }
 
     private fun isFormValid(email: String, password: String): Boolean {
@@ -94,7 +98,6 @@ class LoginActivity : AppCompatActivity() {
                     response: Response<LoginResponse>
                 ) {
                     MyDialog.hideDialog()
-                    Log.i("RESPONSE", response.body().toString())
                     if (response.isSuccessful) {
                         val user = response.body()?.user
                         val token = response.body()?.meta?.token

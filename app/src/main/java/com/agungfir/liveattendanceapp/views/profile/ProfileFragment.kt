@@ -27,14 +27,14 @@ import retrofit2.Response
 
 class ProfileFragment : Fragment() {
 
-    private var binding: FragmentProfileBinding? = null
+    private lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding?.root
+    ): View {
+        binding = FragmentProfileBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,34 +51,37 @@ class ProfileFragment : Fragment() {
             .load(imageUrl)
             .override(100)
             .placeholder(android.R.color.darker_gray)
-            .into(binding?.ivProfile!!)
+            .into(binding.ivProfile)
 
-        binding?.apply {
+        binding.apply {
             tvName.text = user.name
             tvEmailProfile.text = user.email
         }
     }
 
     private fun onClick() {
-        binding?.btnChangePassword?.setOnClickListener {
-            context?.startActivity<ChangePasswordActivity>()
-        }
+        binding.apply {
 
-        binding?.btnChangeLanguage?.setOnClickListener {
-            startActivity(Intent(ACTION_LOCALE_SETTINGS))
-        }
+            btnChangePassword.setOnClickListener {
+                context?.startActivity<ChangePasswordActivity>()
+            }
 
-        binding?.btnLogout?.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle(getString(R.string.log_out))
-                .setMessage(getString(R.string.are_you_sure_to_log_out))
-                .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
-                    logoutRequest(dialog)
-                }
-                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
+            btnChangeLanguage.setOnClickListener {
+                startActivity(Intent(ACTION_LOCALE_SETTINGS))
+            }
+
+            btnLogout.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle(getString(R.string.log_out))
+                    .setMessage(getString(R.string.are_you_sure_to_log_out))
+                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                        logoutRequest(dialog)
+                    }
+                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
         }
     }
 
@@ -117,9 +120,5 @@ class ProfileFragment : Fragment() {
             })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
-    }
 
 }
