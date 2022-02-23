@@ -14,5 +14,6 @@
     <color name="text_primary">#333333</color>
     <color name="text_secondary">#666666</color>
     <color name="divider">#EFEFEF</color>
+    <color name="gray">#F7F7F7</color>
     <color name="handler_bottom_sheet">#C5C5C5</color>
 </resources>
